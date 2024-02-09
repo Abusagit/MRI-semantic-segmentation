@@ -13,7 +13,7 @@ import pickle
 from tqdm.auto import tqdm
 
 
-from training.utils import close_figures, t2img, BimapClasses, save_model_checkpoint, plot_inputs_targets_predictions
+from training.utils import close_figures, t2img, BimapClasses, save_model_checkpoint, plot_inputs_targets_predictions, create_gif_from_images
 from training.metric import IoUMetric
 
 
@@ -135,6 +135,13 @@ def train_model(model, train_loader, eval_loader, test_loader, optimizer, num_ep
         val_losses=val_losses,
     )
     pickle.dump(report_dict, file=open(save_path / "report_dict.pkl", "wb"))
+    
+    
+    for split in ["TRAIN", "VAL"]:
+        images_dir = save_path / split
+        gif_name = save_path / f"{split}_epochs.gif"
+        
+        create_gif_from_images(images_dir=images_dir, gif_path_name=gif_name)
 
     return model, report_dict
         

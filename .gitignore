@@ -4,3 +4,10 @@ data/
 
 *.pyc
 
+*.png
+
+*.pth
+
+*.pkl
+
+.DS_Store

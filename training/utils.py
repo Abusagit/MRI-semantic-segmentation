@@ -7,6 +7,8 @@ import torchvision.transforms as T
 from matplotlib import pyplot as plt
 from enum import IntEnum
 
+from pathlib import Path
+from PIL import Image
 
 
 # Convert a pytorch tensor into a PIL image
@@ -106,3 +108,18 @@ def plot_inputs_targets_predictions(inputs, targets, predictions, save_path, tit
     else:
         plt.show()
     
+def create_gif_from_images(images_dir: Path, gif_path_name: Path):
+    
+    
+    filenames = sorted(images_dir.glob("epoch_*.png"), 
+                       key=lambda name: int(name.stem.split("_")[-1]) # sort by epoch number
+                       )
+    images = [Image.open(image) for image in filenames]
+    
+    images += [images[-1]] * 100
+
+    vid_name = gif_path_name
+
+    frame_one = images[0]
+    frame_one.save(vid_name, format="GIF", append_images=images,
+                save_all=True, duration=100, loop=0)
